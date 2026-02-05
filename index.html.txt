@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>იქნები ჩემი ვალენტინი?</title>
+
+<style>
+
+:root{
+--purple:#9d4edd;
+--purple2:#c77dff;
+}
+
+body{
+margin:0;
+min-height:100vh;
+display:grid;
+place-items:center;
+font-family:Arial;
+background:linear-gradient(white,#ffe0ef);
+overflow:hidden;
+}
+
+/* Purple hearts background */
+body::before{
+content:"";
+position:fixed;
+inset:0;
+opacity:0.18;
+pointer-events:none;
+z-index:0;
+background-size:140px 140px;
+background-repeat:repeat;
+background-image:url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'>\
+<text x='20' y='40' font-size='22'>💜</text>\
+<text x='80' y='30' font-size='18'>💜</text>\
+<text x='60' y='90' font-size='20'>💜</text>\
+<text x='15' y='120' font-size='18'>💜</text>\
+<text x='95' y='120' font-size='22'>💜</text>\
+</svg>");
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:20px;
+text-align:center;
+width:350px;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+position:relative;
+z-index:1;
+}
+
+h1{
+color:var(--purple);
+}
+
+button{
+border:none;
+border-radius:12px;
+font-size:18px;
+cursor:pointer;
+padding:12px 20px;
+}
+
+.yes{
+background:linear-gradient(135deg,var(--purple),var(--purple2));
+color:white;
+transition:.2s;
+}
+
+.playground{
+position:relative;
+height:120px;
+margin-top:20px;
+}
+
+.no{
+background:#6c757d;
+color:white;
+position:absolute;
+left:50%;
+top:50px;
+transform:translateX(-50%);
+}
+
+.tip{
+margin-top:10px;
+font-size:13px;
+color:var(--purple);
+}
+
+#finalMessage{
+display:none;
+margin-top:15px;
+font-size:26px;
+color:var(--purple);
+font-weight:bold;
+}
+
+/* Balloons */
+.balloon{
+position:fixed;
+bottom:-100px;
+font-size:40px;
+animation: float 4s linear forwards;
+}
+
+@keyframes float{
+0%{ transform:translateY(0); opacity:1; }
+100%{ transform:translateY(-120vh); opacity:0; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1 id="title">იქნები ჩემი ვალენტინი?</h1>
+
+<button class="yes" id="yesBtn">კი 💜</button>
+
+<div class="playground">
+<button class="no" id="noBtn">არა</button>
+</div>
+
+<div class="tip">ვეღარ იჯიუტებ თეკ უარს ვერმეტყვი</div>
+
+<p id="finalMessage">💜 ხოდა მასეეეეე 💜</p>
+
+</div>
+
+<script>
+
+const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
+const finalMsg=document.getElementById("finalMessage");
+const playground=document.querySelector(".playground");
+
+let padY=12;
+let padX=20;
+let fontSize=18;
+let dodges=7;
+
+/* Move NO button */
+function moveNo(){
+const box=playground.getBoundingClientRect();
+
+const x=Math.random()*(box.width-noBtn.offsetWidth);
+const y=Math.random()*(box.height-noBtn.offsetHeight);
+
+noBtn.style.left=x+"px";
+noBtn.style.top=y+"px";
+}
+
+/* NO dodge */
+noBtn.addEventListener("mouseenter",()=>{
+if(dodges>0){
+dodges--;
+moveNo();
+}
+});
+
+/* NO clicked → YES grows */
+noBtn.addEventListener("click",()=>{
+padY+=4;
+padX+=6;
+fontSize+=1;
+
+yesBtn.style.padding=`${padY}px ${padX}px`;
+yesBtn.style.fontSize=`${fontSize}px`;
+
+moveNo();
+});
+
+/* BALLOON SPAWNER */
+function createBalloon(){
+
+const balloon=document.createElement("div");
+balloon.className="balloon";
+balloon.innerText="🎈";
+
+balloon.style.left=Math.random()*100+"vw";
+balloon.style.color="hsl("+Math.random()*300+",70%,60%)";
+
+document.body.appendChild(balloon);
+
+setTimeout(()=>balloon.remove(),4000);
+}
+
+/* YES pressed */
+yesBtn.addEventListener("click",()=>{
+
+document.getElementById("title").innerText="იესსს! 💜";
+finalMsg.style.display="block";
+
+/* spawn balloons */
+for(let i=0;i<15;i++){
+setTimeout(createBalloon,i*150);
+}
+
+});
+
+</script>
+
+</body>
+</html>
